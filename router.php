@@ -20,16 +20,11 @@ switch($action){
     case'categorias':
         $controller = new categoriaController();
         $controller->mostrarCategorias();
-<<<<<<< HEAD
-    case 'addProducto':  
-        $controller = new ProductoController();
-        $controller->addProducto();
-        break;      
-=======
+        break;
     case 'addCategoria':
         $controller = new categoriaController();
-        $controller->addCategoria();        
->>>>>>> 840f56449628e4e7cf4da0e116fb2a48fb72c844
+        $controller->addCategoria();  
+        break;      
     default:
         break;    
 }
