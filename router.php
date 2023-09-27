@@ -20,7 +20,9 @@ switch($action){
     case'categorias':
         $controller = new categoriaController();
         $controller->mostrarCategorias();
-    case '':        
+    case 'addCategoria':
+        $controller = new categoriaController();
+        $controller->addCategoria();        
     default:
         break;    
 }
