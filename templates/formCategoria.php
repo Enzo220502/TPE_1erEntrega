@@ -4,5 +4,5 @@
       <label class="form-label">Nombre</label>
       <input type="text" class="form-control" placeholder="Ingrese Nombre" name = "nombre" value="">
     </div>
-    <button type="submit" class="btn btn-primary">Agregar</button>
+    <button type="submit" class="btn btn-success">Agregar</button>
 </form>
