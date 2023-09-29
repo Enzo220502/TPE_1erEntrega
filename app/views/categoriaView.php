@@ -9,7 +9,7 @@ class categoriaView{
     public function verCategorias($categorias){
         require_once 'templates/header.php';
         require_once 'templates/formCategoria.php';
-        echo "<div class='d-column-flex justify-content-center'> <table class='table table-bordered table-responsive '>
+        echo "<div class='d-column-flex justify-content-center'> <table class='table table-success table-striped'>
         <thead><th class = 'text-center'>Categorias</th>
         </thead><tbody>";
         foreach($categorias as $cat){
@@ -19,10 +19,10 @@ class categoriaView{
                         <p class='text-center'>$cat->categoria</p>
                     </td>
                     <td class=''>
-                        <a type='button' href = 'eliminarCategoria/$cat->id_categoria' class='btn btn-primary btn-sm'>Borrar</a> 
+                        <a type='button' href = 'eliminarCategoria/$cat->id_categoria' class='btn btn-danger'>Borrar</a> 
                     </td>
                     <td class=''>
-                        <a type = 'button' href = 'editarCategoria/$cat->id_categoria' class='btn btn-primary btn-sm mb-3'>Editar</a>
+                        <a type = 'button' href = 'editarCategoria/$cat->id_categoria' class='btn btn-warning'>Editar</a>
                     </td>
                     <td class=''>
                         <a type = 'button' href = 'productos/$cat->id_categoria' class='btn btn-primary btn-sm'>Ver Productos</a>
@@ -31,7 +31,7 @@ class categoriaView{
             ";
         }
         echo "</tbody></table></div>";
-        require_once 'templates/footel.php';
+        require_once 'templates/footer.php';
     }
 
 }
