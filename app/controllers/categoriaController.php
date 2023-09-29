@@ -33,7 +33,7 @@ class categoriaController{
 
             $this->model->addCategoria($nombre);
 
-            header('Location: '.'categorias');
+            header('Location: '.BASE_URL.'categorias');
         }
         else{
             header('Location: '.BASE_URL);
@@ -42,15 +42,24 @@ class categoriaController{
     }
 
     public function eliminarCategoria($id){
-        if(!empty($id)){
-            $this->model->borrarCategoria($id);    
-            header('Location: '.'categorias');
-        }
-        else{
-            header('Location: '.'categorias');
-        }
+        $eliminado = $this->model->borrarCategoria($id);
+        header('Location: '.BASE_URL.'categorias');
+        return $eliminado;
     }
 
+    public function mostrarFormEditCategoria($id){
+        $cat = $this->model->obtenerPorId($id);
+        $this->view->mostrarEditar($cat);
+    }   
+
+    public  function actualizarCategoria($id){
+        if(!empty($_POST['nombreEditado'])){
+            $nuevoNombre = $_POST['nombreEditado'];
+            $this->model->subirCambios($id,$nuevoNombre);
+        }
+        header('Location: '.BASE_URL.'categorias');
+        return;
+    }
 
 }
 

@@ -19,7 +19,7 @@ $params = explode('/', $action);
 
 //Respetar nombres de funciones en los controladores
 
-switch($action){
+switch($params[0]){
     case 'productos':
         $prodController->mostrarProductos();
         break;
@@ -42,12 +42,19 @@ switch($action){
         break;
     case 'eliminarCategoria':
         $id = $params[1];
-        $catController-> eliminarCategoria($id);
+        $catController->eliminarCategoria($id);
+        break;
+    case 'formEditarCategoria':
+        $id = $params[1];
+        $catController->mostrarFormEditCategoria($id);
         break;
     case 'editarCategoria':
         $id = $params[1];
-        $catController->editarCategoria($id);
-        break;             
+        $catController->actualizarCategoria($id);
+        break;
+    case'filtroCategorias':
+        $id = $params[1];
+        $prodController->mostrarProductos($id);                     
     default:
         break;    
 }
