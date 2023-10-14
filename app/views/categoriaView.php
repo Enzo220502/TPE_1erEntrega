@@ -1,57 +1,40 @@
 <?php
+require_once './libs/smarty-4.3.4/libs/Smarty.class.php';
 
 class categoriaView{
 
+    private $smarty;
+
     function __construct(){
-        
+    
+        $this->smarty = new Smarty();
+
+        $this->smarty->assign('BASE_URL',BASE_URL);
+        $this->smarty->assign('URL_PRODUCTOS',PRODUCTOS);
+        $this->smarty->assign('URL_CATEGORIAS',CATEGORIAS);
+        $this->smarty->assign('URL_ABOUT',ABOUT);
+        $this->smarty->assign('LOGIN',LOGIN);
+        $this->smarty->assign('LOGOUT',LOGOUT);
     }
 
-    public function verCategorias($categorias){
-        require_once 'templates/header.php';
-        require_once 'templates/formCategoria.php';
-        echo "<div class='d-column-flex justify-content-center'> <table class='table table-success table-striped'>
-        <thead><th class = 'text-center'>Categorias</th>
-        </thead><tbody>";
-        foreach($categorias as $cat){
-            $urlFiltro = BASE_URL."filtroCategorias/$cat->id";
-            echo "
-                <tr>
-                    <td>
-                        <p class='text-center'>$cat->categoria</p>
-                    </td>
-                    <td>
-                        <a type='button' href = 'eliminarCategoria/$cat->id' class='btn btn-primary btn-sm'>Borrar</a> 
-                    </td>
-                    <td>
-                        <a type = 'button' href = 'formEditarCategoria/$cat->id' class='btn btn-primary btn-sm mb-3'>Editar</a>
-                    <td class=''>
-                        <a type='button' href = 'eliminarCategoria/$cat->id_categoria' class='btn btn-danger'>Borrar</a> 
-                    </td>
-                    <td class=''>
-                        <a type = 'button' href = 'editarCategoria/$cat->id_categoria' class='btn btn-warning'>Editar</a>
-                    </td>
-                    <td>
-                        <a type = 'button' href = '$urlFiltro' class='btn btn-primary btn-sm'>Ver Productos</a>
-                    </td>
-                </tr>
-            ";
-        }
-        echo "</tbody></table></div>";
-        require_once 'templates/footer.php';
+    public function verCategorias($categorias,$mensaje){
+
+        $this->smarty->assign('URL_FILTRO',BASE_URL."filtroCategorias/");
+        $this->smarty->assign('URL_BORRAR',BASE_URL."eliminarCategoria/");
+        $this->smarty->assign('URL_EDITAR',BASE_URL."formEditarCategoria/");
+        $this->smarty->assign('mensaje',$mensaje);
+        $this->smarty->assign('categorias',$categorias);
+
+        $this->smarty->display('listadoCategorias.tpl');
     }
 
     public function mostrarEditar($cat){
-        $url = BASE_URL."editarCategoria/".$cat->id;
-        include_once 'templates/header.php';
-        echo"<form action ='$url' method = 'POST'>
-                <p class='text-center'>Editar Categoria</p>
-                <div class='mb-3'>
-                    <label for='disabledTextInput' class='form-label'>Nombre</label>
-                    <input type='text' class='form-control' placeholder='Ingrese Nombre' name = 'nombreEditado' value='$cat->categoria'>
-                </div>
-                <button type='submit' class='btn btn-primary'>Actualizar</button>
-            </form>";
-        include_once 'templates/footel.php';
+        
+        $this->smarty->assign('URL_EDITAR',BASE_URL."editarCategoria/");
+        $this->smarty->assign('cat',$cat);
+
+        $this->smarty->display('formEditarCategoria.tpl');
+
     }
 
 }

@@ -1,50 +1,173 @@
 <?php
 require_once './app/models/productoModel.php';
 require_once './app/views/productoView.php';
+require_once './app/helpers/authHelper.php';
 
 class ProductoController{
 
     private $model;
     private $view;
 
-    function __construct(){
+    public function __construct(){
         $this->model = new productoModel();
         $this->view = new productoView();
     }
 
-    public function mostrarProductos($id){
-        $productos = $this->model->obtenerProductos($id);
+    public function mostrarProductos($categorias){
+        AuthHelper::iniciarSession();
+
+        $productos = $this->model->obtenerProductos();
+
+        if(isset($_SESSION['MENSAJE'])){
+            $mensaje = $_SESSION['MENSAJE'];
+        }
+
         if(!empty($productos)){
-            $this->view->imprimirFiltrados($productos);
+            if(isset($mensaje)){
+                $mensajeMostrar = $mensaje;
+                $_SESSION['MENSAJE'] = null;
+                $this->view->mostrarProductos($productos,$mensajeMostrar,$categorias);
+            }else{
+                $this->view->mostrarProductos($productos,null,$categorias);
+            }
+        }
+        else {
+            $this->view->mostrarProductos($productos,"No hay productos que mostrar",$categorias);
+        }
+    }
+
+    public function agregarProducto($cats) {
+        AuthHelper::verificar();
+
+        $nombre = $_POST['nombre'];
+        $descripcion = $_POST['descripcion'];
+        $precio = $_POST['precio'];
+        $marca = $_POST['marca'];
+        $cat = $_POST['categoria'];
+
+       
+        if(!empty($nombre)&&!empty($cat)&&!empty($descripcion)&&!empty($precio)&&!empty($marca)){
+            if($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png" ) {
+                $res = $this->model->agregarProducto($nombre, $descripcion, $precio, $marca,$cat,$_FILES['imagen']);
+            }else{
+                $res = $this->model->agregarProducto($nombre, $descripcion, $precio, $marca,$cat);
+            }
         }
         else{
-            header("Location: ".BASE_URL."categorias");
+            $_SESSION['MENSAJE'] = "No se añadio el producto,por favor complete todos los campos!";
         }
-    }
-    public function mostrarProductos (){
-        $productos = $this -> model->obtenerProductos();
-        $cat = $this->model->obtenerCategorias();
-        $this-> view-> mostrarProductos ($productos, $cat);
+
+        if($res){
+            $_SESSION['MENSAJE'] = "Se añadio el producto con exito";
+        }
+
+        header('Location: '.PRODUCTOS);
     }
 
-    function agregarProducto() {
-        if((isset($_POST['nombre'])&&isset($_POST['descripcion'])&&isset($_POST['precio'])&&isset($_POST['marca']))&&!empty($_POST['nombre'])&&!empty($_POST['descripcion'])&&!empty($_POST['precio'])&&!empty($_POST['marca'])){      
-            $nombre = $_POST['nombre'];
-            $descripcion = $_POST['descripcion'];
-            $precio = $_POST['precio'];
-            $marca = $_POST['marca'];
+    public function mostrarFormEditarProducto($id,$cats){
+        AuthHelper::verificar();
 
-            $this->model->nuevoProducto($nombre, $descripcion, $precio, $marca);
-            $id = $this->model->nuevoProducto($nombre, $descripcion, $precio, $marca);
-        }
-        header("Location:"  . BASE_URL. "productos");
+        $prod = $this->model->obtenerUnProductoPorId($id);
+
+        $this->view->mostrarFormEditarProducto($prod,$cats);
+    }
+
+    public function eliminarProducto($id){
+        AuthHelper::verificar();
+
+        $prod = $this->model->obtenerUnProductoPorId($id);
+
+        if($prod){
+
+            $res = $this->model->eliminarProducto($id);
             
+            if($res){
+                $_SESSION['MENSAJE'] = "Se elimino correctamente el producto";
+            }
+            else{   
+                $_SESSION['MENSAJE'] = "No se pudo eliminar el producto,algo fallo";
+            }
+        }
+        else{
+            $_SESSION['MENSAJE'] = "No existe ningun producto con el ID= ".$id;
+        }
+
+        header('Location: '.PRODUCTOS);
+
     }
 
+    public function actualizarProducto($id,$cats){
+        AuthHelper::verificar();
 
+        $prod = $this->model->obtenerUnProductoPorId($id);
+        //verifico que exista un producto en nuestra base de datos con ese id
+        if($prod){
+            $nombre = $_POST['nombreNuevo'];
+            $descripcion = $_POST['descripcionNuevo'];
+            $precio = $_POST['precioNuevo'];
+            $marca = $_POST['marcaNuevo'];
+            $cat = $_POST['categoriaNuevo'];
+            
+            if(!empty($nombre)&&!empty($descripcion)&&!empty($precio)&&!empty($marca)&&!empty($cat)){
+                
+                $res = $this->model->actualizarProducto($id,$nombre,$descripcion,$precio,$marca,$cat);
+            
+                if($res){
+                    $_SESSION['MENSAJE'] = "Se actualizo el producto con exito";
+                }
+                else{
+                    $_SESSION['MENSAJE'] = "No se logro actualizar el producto con el ID = ".$id;
+                }
 
+            }else{
+                $_SESSION['MENSAJE'] = "Completa todos los datos del formulario por favor!";
+                header('Location: '.BASE_URL.'formEditarProducto/'.$id);
+            }
 
+            
+        }
+        else{
+            $_SESSION['MENSAJE'] = "Error! No se encontro el producto.";
+        }
 
+        header('Location: '.PRODUCTOS);
+    }
+
+    public function mostrarProductosPorId($id,$cats){
+        AuthHelper::iniciarSession();
+        $productos = $this->model->obtenerProductosPorId($id);
+        if(!empty($productos)){
+            $this->view->mostrarProductos($productos,"Estos son los productos encontrados de la categoria:",$cats);
+        }
+        else{
+            $prod = $this->model->obtenerProductos();
+            $this->view->mostrarProductos($prod,"No encontramos elementos sobre la categoria",$cats);
+        }
+    }
+
+    public function verInfo($id){
+        AuthHelper::iniciarSession();
+        if(!empty($id)){
+            $prod = $this->model->obtenerUnProductoPorId($id);
+
+            if($prod){
+                $this->view->mostrarInfo($prod);
+            }else{
+                header('Location: '.PRODUCTOS);    
+            }
+        }
+        else{
+            header('Location: '.PRODUCTOS);
+        }
+    }
+
+    public function obtenerProductosPorCategoria($id){
+        $cant = null;
+        if(!empty($id)){
+            $cant = $this->model->obtenerProductosPorCategoria($id);
+        }
+        return $cant;
+    }
 
 }
 ?>

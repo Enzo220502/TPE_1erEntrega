@@ -1,13 +1,7 @@
 <?php
-require_once './db/config.php';
+require_once './db/model.php';
 
-class categoriaModel{
-
-    private $db;
-
-    function __construct(){
-        $this->db = new PDO('mysql:host=localhost;dbname=productos_tpe;charset=utf8', 'root', '');
-    }
+class categoriaModel extends Model{
 
     public function obtenerCategorias(){
         $query = $this->db->prepare("SELECT * FROM categorias");
@@ -17,9 +11,9 @@ class categoriaModel{
     }
 
 
-    public function addCategoria($nueva){
-        $query = $this->db->prepare("INSERT INTO categorias (categoria) VALUES (?)");
-        $query->execute([$nueva]);
+    public function addCategoria($nombre,$desc){
+        $query = $this->db->prepare("INSERT INTO categorias (nombre_categoria,descripcion_categoria) VALUES (?,?)");
+        $query->execute([$nombre,$desc]);
         return $query;
     }
 
@@ -36,9 +30,9 @@ class categoriaModel{
         return;
     }
 
-    public function subirCambios($id,$nombre){
-        $query = $this->db->prepare('UPDATE categorias SET categoria = ? WHERE id= ?');
-        $query->execute([$nombre,$id]);
+    public function subirCambios($id,$nombre,$desc){
+        $query = $this->db->prepare('UPDATE categorias SET nombre_categoria = ?, descripcion_categoria = ? WHERE id= ?');
+        $query->execute([$nombre,$desc,$id]);
         return $query;
     }
 

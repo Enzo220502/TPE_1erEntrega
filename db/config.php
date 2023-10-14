@@ -1,16 +1,8 @@
 <?php
+    
+    const MYSQL_HOST = 'localhost';
+    const MYSQL_DB = 'productos_tpe';
+    const MYSQL_USER = 'root';
+    const MYSQL_PASS = '';
 
-class dbConfig{
-
-    private $db;
-
-    function __construct(){
-        $this->db = new PDO('mysql:host=localhost;dbname=productos_tpe;charset=utf8', 'root', '');
-    }
-
-    public function generarDb(){
-        
-    }
-
-}
 ?>
