@@ -1,0 +1,4 @@
+#ignorar carpeta 'templates_c'
+./templates_c
+#ignorar todo lo que este dentro de productos
+./img/productos/*
