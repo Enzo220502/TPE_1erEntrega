@@ -29,7 +29,6 @@ class productoModel extends Model{
         $rutaImg = null;
         if($imagen){
             $rutaImg = $this->subirImagen($imagen);
-            $rutaImg = ".".$rutaImg;
         }
         $query = $this->db->prepare("INSERT INTO productos (nombre,descripcion,precio,marca,id_categoria,imagen) VALUES (?,?,?,?,?,?)");
         $query->execute([$nom,$desc,$precio,$marca,$cat,$rutaImg]);
@@ -39,6 +38,7 @@ class productoModel extends Model{
     public function subirImagen($imagen){
         $destino = "./img/productos/" . uniqid() . "." . strtolower(pathinfo($imagen['name'], PATHINFO_EXTENSION));  
         move_uploaded_file($imagen['tmp_name'], $destino);
+        $destino = ".".$destino;
         return $destino;
     }
 
@@ -48,9 +48,16 @@ class productoModel extends Model{
         return $query;
     }
 
-    public function actualizarProducto($id,$nombre,$descripcion,$precio,$marca,$cat){
-        $query = $this->db->prepare("UPDATE `productos` SET nombre=?,descripcion=?,precio=?,marca=?,id_categoria=? WHERE ID=?");
-        $query->execute([$nombre,$descripcion,$precio,$marca,$cat,$id]);
+    public function actualizarProducto($id,$nombre,$descripcion,$precio,$marca,$cat, $imagen = null){
+        $rutaImg = null;
+        if($imagen){
+            $rutaImg = $this->subirImagen($imagen);
+            $query = $this->db->prepare("UPDATE `productos` SET nombre=?,descripcion=?,precio=?,marca=?,id_categoria=?,imagen=? WHERE ID=?");
+            $query->execute([$nombre,$descripcion,$precio,$marca,$cat,$rutaImg,$id]);
+        }else{
+            $query = $this->db->prepare("UPDATE `productos` SET nombre=?,descripcion=?,precio=?,marca=?,id_categoria=? WHERE ID=?");
+            $query->execute([$nombre,$descripcion,$precio,$marca,$cat,$id]);
+        }
         return $query;
     }
 

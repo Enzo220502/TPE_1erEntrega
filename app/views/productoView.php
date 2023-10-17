@@ -12,7 +12,6 @@ class productoView{
         $this->smarty->assign('BASE_URL',BASE_URL);
         $this->smarty->assign('URL_PRODUCTOS',PRODUCTOS);
         $this->smarty->assign('URL_CATEGORIAS',CATEGORIAS);
-        $this->smarty->assign('URL_ABOUT',ABOUT);
         $this->smarty->assign('LOGIN',LOGIN);
         $this->smarty->assign('LOGOUT',LOGOUT);
     }
@@ -43,6 +42,10 @@ class productoView{
         $this->smarty->display('infoProducto.tpl');
     }
     
+    public function mostrarError(){
+
+        $this->smarty->display('notFound.tpl');
+    }
 }
 
 ?>

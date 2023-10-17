@@ -18,16 +18,13 @@ class ProductoController{
 
         $productos = $this->model->obtenerProductos();
 
-        if(isset($_SESSION['MENSAJE'])){
-            $mensaje = $_SESSION['MENSAJE'];
-        }
-
         if(!empty($productos)){
-            if(isset($mensaje)){
-                $mensajeMostrar = $mensaje;
+            if(!empty($_SESSION['MENSAJE'])){
+                $mensaje = $_SESSION['MENSAJE'];
                 $_SESSION['MENSAJE'] = null;
-                $this->view->mostrarProductos($productos,$mensajeMostrar,$categorias);
-            }else{
+                $this->view->mostrarProductos($productos,$mensaje,$categorias);
+            }
+            else{
                 $this->view->mostrarProductos($productos,null,$categorias);
             }
         }
@@ -110,8 +107,12 @@ class ProductoController{
             
             if(!empty($nombre)&&!empty($descripcion)&&!empty($precio)&&!empty($marca)&&!empty($cat)){
                 
-                $res = $this->model->actualizarProducto($id,$nombre,$descripcion,$precio,$marca,$cat);
-            
+                if($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png" ) {
+                    $res = $this->model->actualizarProducto($id,$nombre, $descripcion, $precio, $marca,$cat,$_FILES['imagen']);
+                }
+                else{
+                    $res = $this->model->actualizarProducto($id,$nombre,$descripcion,$precio,$marca,$cat);
+                }
                 if($res){
                     $_SESSION['MENSAJE'] = "Se actualizo el producto con exito";
                 }
@@ -135,30 +136,30 @@ class ProductoController{
 
     public function mostrarProductosPorId($id,$cats){
         AuthHelper::iniciarSession();
+
         $productos = $this->model->obtenerProductosPorId($id);
+
         if(!empty($productos)){
             $this->view->mostrarProductos($productos,"Estos son los productos encontrados de la categoria:",$cats);
-        }
-        else{
-            $prod = $this->model->obtenerProductos();
-            $this->view->mostrarProductos($prod,"No encontramos elementos sobre la categoria",$cats);
+        }else{
+            $this->view->mostrarProductos($productos,"No encontramos productos:",$cats);
         }
     }
 
     public function verInfo($id){
         AuthHelper::iniciarSession();
-        if(!empty($id)){
-            $prod = $this->model->obtenerUnProductoPorId($id);
-
-            if($prod){
-                $this->view->mostrarInfo($prod);
-            }else{
-                header('Location: '.PRODUCTOS);    
-            }
+        
+        $prod = $this->model->obtenerUnProductoPorId($id);
+        
+        if(!empty($prod)){
+            $this->view->mostrarInfo($prod);
         }
         else{
-            header('Location: '.PRODUCTOS);
+            $_SESSION['MENSAJE'] = "No existe el producto que ha seleccionado.";
+            header('Location: '.PRODUCTOS);    
         }
+
+        
     }
 
     public function obtenerProductosPorCategoria($id){
@@ -167,6 +168,10 @@ class ProductoController{
             $cant = $this->model->obtenerProductosPorCategoria($id);
         }
         return $cant;
+    }
+
+    public function notFoundError(){
+        $this->view->mostrarError();
     }
 
 }

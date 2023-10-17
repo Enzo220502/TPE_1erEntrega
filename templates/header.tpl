@@ -26,9 +26,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{$URL_CATEGORIAS}">Categorias</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{$URL_ABOUT}">Sobre Nosotros</a>
-                    </li>
                 </ul>
                 <div class="d-flex">
                     {if isset($smarty.session.ID_USUARIO)}

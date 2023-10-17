@@ -1,7 +1,7 @@
 {include file='header.tpl'}
         <div class = 'm-3'>
         <p class='text-center'>Form Editar Producto</p>
-        <form class='row g-3' action='{BASE_URL|cat:"actualizarProducto/"|cat:$producto->ID}' method='POST'>
+        <form class='row g-3' action='{BASE_URL|cat:"actualizarProducto/"|cat:$producto->ID}' method='POST' enctype='multipart/form-data'>
         <div class='col-md-2'>
             <label for='inputNombre' class='form-label'>Nombre</label>
             <input type='text' class='form-control' id='inputNombre' name='nombreNuevo' value='{$producto->nombre}'>
@@ -30,8 +30,14 @@
                     {/foreach}    
                 </select>
         </div>
-        <div class='col-4'>
-            <button type='submit' class='btn btn-primary mt-2'>Editar</button>
+        <div class='col-md-15 d-flex'>
+            <div class = "col-md-4">
+                <label for='inputImagen' class='form-label'>Imagen:</label>
+                <input type='file' class='form-control' id='inputImagen'name='imagen' value='{$producto->imagen}'>
+            </div>
+            <div class = "m-4">
+                <button type='submit' class='btn btn-primary mt-2'>Editar</button>
+            </div>
         </div>
     </form></div>
 {include file = 'footer.tpl'}

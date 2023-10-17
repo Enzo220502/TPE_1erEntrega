@@ -6,11 +6,12 @@ require_once './db/config.php';
         protected $db;
 
         function __construct() {
+            $this->crearDb(MYSQL_HOST,MYSQL_DB);
             $this->db = new PDO('mysql:host='. MYSQL_HOST .';dbname='. MYSQL_DB .';charset=utf8', MYSQL_USER, MYSQL_PASS);
             $this->deploy();
         }
 
-        function deploy() {
+        private function deploy() {
             // Chequear si hay tablas
             $query = $this->db->query('SHOW TABLES');
             $tables = $query->fetchAll(); // Nos devuelve todas las tablas de la db
@@ -149,6 +150,15 @@ require_once './db/config.php';
             }
             
         }
+
+        
+        private function crearDb(){
+            $nombreDb = MYSQL_DB;
+            $pdo = new PDO('mysql:host =' . MYSQL_HOST.';charset = utf8', MYSQL_USER, MYSQL_PASS);
+            $query = "CREATE DATABASE IF NOT EXISTS $nombreDb";
+            $pdo->exec($query);
+        }
+        
     }
 
 ?>

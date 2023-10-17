@@ -8,7 +8,6 @@ define('LOGIN', '//'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . d
 define('LOGOUT', '//'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']).'/logout');
 define('PRODUCTOS', '//'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']).'/productos');
 define('CATEGORIAS', '//'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']).'/categorias');
-define('ABOUT', '//'.$_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . dirname($_SERVER['PHP_SELF']).'/about');
 
 $prodController = new ProductoController();
 $catController = new categoriaController();
@@ -21,8 +20,6 @@ if (!empty($_GET['action'])) {
 
 $params = explode('/', $action);
 
-
-//Respetar nombres de funciones en los controladores
 
 switch($params[0]){
     case 'login':
@@ -86,6 +83,7 @@ switch($params[0]){
         $cats = $catController->obtenerCategorias();
         $prodController->mostrarProductosPorId($id,$cats);                     
     default:
+        $prodController->notFoundError();
         break;    
 }
 

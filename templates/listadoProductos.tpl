@@ -1,7 +1,7 @@
 {include file='header.tpl'}
     {if isset($smarty.session.ID_USUARIO)}{include file = 'formProducto.tpl'}{/if}
         <p class='nombre_tabla text-center m-4 mb-4'>Productos</p>
-        {if isset($mensaje)}
+        {if !empty($mensaje)}
             <div class='alert alert-primary m-4 alert-dismissible' role='alert'>
             <button class="btn-close" data-bs-dismiss = "alert"></button>
                 {$mensaje}
