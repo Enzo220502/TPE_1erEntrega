@@ -81,7 +81,8 @@ switch($params[0]){
     case'filtroCategorias':
         $id = $params[1];
         $cats = $catController->obtenerCategorias();
-        $prodController->mostrarProductosPorId($id,$cats);                     
+        $prodController->mostrarProductosPorId($id,$cats);
+        break;                     
     default:
         $prodController->notFoundError();
         break;    

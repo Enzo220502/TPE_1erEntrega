@@ -9,4 +9,5 @@
         </div>
         <button type='submit' class='btn btn-primary'>Actualizar</button>
     </form>
+    <a type="button" class='btn btn-primary btn-sm ' href = "{CATEGORIAS}">Volver</a>
 {include file='footer.tpl'}

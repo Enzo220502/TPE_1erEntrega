@@ -1,5 +1,5 @@
 <?php
-require_once './db/model.php';
+require_once 'model.php';
 
 class productoModel extends Model{
 

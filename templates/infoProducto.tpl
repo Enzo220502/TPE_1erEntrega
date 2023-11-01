@@ -19,5 +19,6 @@
           {/if}
         </div>
     </div>
+    <a type="button" class='btn btn-primary btn-sm ' href = "{PRODUCTOS}">Volver</a>
 </div>
 {include file='footer.tpl'}
